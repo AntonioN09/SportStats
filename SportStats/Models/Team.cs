@@ -4,8 +4,16 @@ namespace SportStats.Models
 {
     public class Team : BaseEntity
     {
-        String? Location { get; set; }
+        public String? Location { get; set; }
 
-        int Prestige { get; set; }
+        public int Prestige { get; set; }
+
+        public ICollection<Player> Players { get; set; }
+
+        public ICollection<TeamInEvent> TeamsInEvents { get; set; }
+
+        public Manager Manager { get; set;}
+
+        public Guid ManagerId { get; set; }
     }
 }

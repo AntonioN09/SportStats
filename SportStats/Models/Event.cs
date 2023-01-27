@@ -4,8 +4,10 @@ namespace SportStats.Models
 {
     public class Event : BaseEntity
     {
-        String? Location { get; set; }
+        public String? Location { get; set; }
 
-        String? Summary { get; set; }
+        public String Summary { get; set; }
+
+        public ICollection<TeamInEvent> TeamsInEvents { get; set; }
     }
 }

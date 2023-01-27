@@ -4,8 +4,12 @@ namespace SportStats.Models
 {
     public class Player : BaseEntity
     {
-        int Cooperation { get; set; }
+        public int Cooperation { get; set; }
 
-        int Skill { get; set; }
+        public int Skill { get; set; }
+
+        public Team Team { get; set; }
+
+        public Guid TeamId { get; set; }    
     }
 }

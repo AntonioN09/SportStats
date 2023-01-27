@@ -4,8 +4,10 @@ namespace SportStats.Models
 {
     public class Manager : BaseEntity
     {
-        String? Style { get; set; }
+        public String Style { get; set; }
 
-        int Tactics { get; set; }
+        public int Tactics { get; set; }
+
+        public Team Team { get; set; }
     }
 }

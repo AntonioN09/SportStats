@@ -31,11 +31,18 @@ namespace SportStats.Migrations
                     b.Property<int>("Awards")
                         .HasColumnType("int");
 
+                    b.Property<string>("Location")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Rating")
                         .HasColumnType("int");
+
+                    b.Property<string>("Summary")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -57,6 +64,13 @@ namespace SportStats.Migrations
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
+                    b.Property<string>("Style")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Tactics")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Managers");
@@ -71,13 +85,24 @@ namespace SportStats.Migrations
                     b.Property<int>("Awards")
                         .HasColumnType("int");
 
+                    b.Property<int>("Cooperation")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
+                    b.Property<int>("Skill")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("TeamId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TeamId");
 
                     b.ToTable("Players");
                 });
@@ -91,15 +116,101 @@ namespace SportStats.Migrations
                     b.Property<int>("Awards")
                         .HasColumnType("int");
 
+                    b.Property<string>("Location")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ManagerId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Prestige")
+                        .HasColumnType("int");
 
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ManagerId")
+                        .IsUnique();
+
                     b.ToTable("Teams");
+                });
+
+            modelBuilder.Entity("SportStats.Models.TeamInEvent", b =>
+                {
+                    b.Property<Guid>("TeamId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("TeamId", "EventId");
+
+                    b.HasIndex("EventId");
+
+                    b.ToTable("TeamsInEvents");
+                });
+
+            modelBuilder.Entity("SportStats.Models.Player", b =>
+                {
+                    b.HasOne("SportStats.Models.Team", "Team")
+                        .WithMany("Players")
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Team");
+                });
+
+            modelBuilder.Entity("SportStats.Models.Team", b =>
+                {
+                    b.HasOne("SportStats.Models.Manager", "Manager")
+                        .WithOne("Team")
+                        .HasForeignKey("SportStats.Models.Team", "ManagerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Manager");
+                });
+
+            modelBuilder.Entity("SportStats.Models.TeamInEvent", b =>
+                {
+                    b.HasOne("SportStats.Models.Event", "Event")
+                        .WithMany("TeamsInEvents")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SportStats.Models.Team", "Team")
+                        .WithMany("TeamsInEvents")
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("Team");
+                });
+
+            modelBuilder.Entity("SportStats.Models.Event", b =>
+                {
+                    b.Navigation("TeamsInEvents");
+                });
+
+            modelBuilder.Entity("SportStats.Models.Manager", b =>
+                {
+                    b.Navigation("Team")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SportStats.Models.Team", b =>
+                {
+                    b.Navigation("Players");
+
+                    b.Navigation("TeamsInEvents");
                 });
 #pragma warning restore 612, 618
         }
