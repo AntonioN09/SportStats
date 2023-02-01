@@ -5,6 +5,6 @@ namespace SportStats.Repositories.PlayerRepository
 {
     public interface IPlayerRepository : IGenericRepository<Player>
     {
-        public Task<List<Player>> FindRange(List<Guid> playersIds);
+        public Task<List<Player>> GetTopPlayers();
     }
 }

@@ -5,6 +5,8 @@ namespace SportStats.Repositories.TeamRepository
 {
     public interface ITeamRepository : IGenericRepository<Team>
     {
-        public Task<List<Team>> FindRange(List<Guid> teamsIds);
+        public Task<List<Team>> GetAllWithInclude();
+
+        public Task<List<Team>> GetAllWithJoin();
     }
 }

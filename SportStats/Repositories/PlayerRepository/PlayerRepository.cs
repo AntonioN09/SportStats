@@ -9,9 +9,9 @@ namespace SportStats.Repositories.PlayerRepository
     {
         public PlayerRepository(SportStatsContext context) : base(context) { }
 
-        public async Task<List<Player>> FindRange(List<Guid> playersIds)
+        public async Task<List<Player>> GetTopPlayers()
         {
-            return await _table.Where(x => playersIds.Contains(x.Id)).ToListAsync();
+            return await _table.OrderBy(x => x.Skill).ToListAsync();
         }
     }
 }

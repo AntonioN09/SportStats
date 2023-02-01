@@ -9,9 +9,19 @@ namespace SportStats.Repositories.TeamRepository
     {
         public TeamRepository(SportStatsContext context) : base(context) { }
 
-        public async Task<List<Team>> FindRange(List<Guid> teamsIds)
+        public async Task<List<Team>> GetAllWithInclude()
         {
-            return await _table.Where(x => teamsIds.Contains(x.Id)).ToListAsync();
+            return await _table.Include(x => x.Players).ToListAsync();
         }
+
+        public async Task<List<Team>> GetAllWithJoin()
+        {
+            var result = _table.Join(_context.Players, team => team.Id, player => player.TeamId,
+                (team, player) => new { team, player }).Select(x => x.team);
+
+            return await result.ToListAsync();
+        }
+
+
     }
 }

@@ -9,9 +9,19 @@ namespace SportStats.Repositories.ManagerRepository
     {
         public ManagerRepository(SportStatsContext context) : base(context) { }
 
-        public async Task<List<Manager>> FindRange(List<Guid> managersIds)
+        public void GroupManagers()
         {
-            return await _table.Where(x => managersIds.Contains(x.Id)).ToListAsync();
+            var groupedManagers = from m in _table
+                                   group m by m.Tactics;
+
+            foreach (var managerGroup in groupedManagers)
+            {
+                Console.WriteLine("Manager group: " + managerGroup.Key);
+                foreach (Manager m in managerGroup)
+                {
+                    Console.WriteLine("Manager name: " + m.Name);
+                }
+            }
         }
     }
 }
