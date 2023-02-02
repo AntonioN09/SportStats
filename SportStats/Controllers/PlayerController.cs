@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SportStats.Data;
 using SportStats.Models;
+using SportStats.Services.PlayerService;
 
 namespace SportStats.Controllers
 {
@@ -11,10 +12,12 @@ namespace SportStats.Controllers
     public class PlayerController : ControllerBase
     {
         private SportStatsContext _sportStatsContext;
+        private readonly IPlayerService _playerService;
 
-        public PlayerController(SportStatsContext sportStatsContext)
+        public PlayerController(SportStatsContext sportStatsContext, IPlayerService playerService)
         {
             _sportStatsContext = sportStatsContext;
+            _playerService = playerService;
         }
 
         [HttpGet]

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SportStats.Data;
 using SportStats.Models;
+using SportStats.Services.EventService;
 
 namespace SportStats.Controllers
 {
@@ -11,10 +12,12 @@ namespace SportStats.Controllers
     public class EventController : ControllerBase
     {
         private SportStatsContext _sportStatsContext;
+        private readonly IEventService _eventService;
 
-        public EventController(SportStatsContext sportStatsContext)
+        public EventController(SportStatsContext sportStatsContext, IEventService eventService)
         {
             _sportStatsContext = sportStatsContext;
+            _eventService = eventService;
         }
 
         [HttpGet]

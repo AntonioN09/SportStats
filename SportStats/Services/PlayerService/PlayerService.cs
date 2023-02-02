@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using SportStats.Models;
+﻿using SportStats.Models;
 using SportStats.Repositories.PlayerRepository;
 using SportStats.Services.PlayerService;
 
@@ -8,24 +7,20 @@ namespace SportStats.Services.PlayerService
     public class PlayerService : IPlayerService
     {
         public IPlayerRepository _playerRepository;
-        public IMapper _mapper;
 
-        public PlayerService(IPlayerRepository playerRepository, IMapper mapper)
+        public PlayerService(IPlayerRepository playerRepository)
         {
             _playerRepository = playerRepository;
-            _mapper = mapper;
         }
 
         public async Task<List<Player>> GetAll()
         {
-            var players = await _playerRepository.GetAll();
-            return _mapper.Map<List<Player>>(players);
+            return await _playerRepository.GetAll();
         }
 
         public async Task AddPlayer(Player newPlayer)
         {
-            var newDbPlayer = _mapper.Map<Player>(newPlayer);
-            await _playerRepository.CreateAsync(newDbPlayer);
+            await _playerRepository.CreateAsync(newPlayer);
             await _playerRepository.SaveAsync();
         }
 

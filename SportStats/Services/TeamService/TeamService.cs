@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using SportStats.Models;
+﻿using SportStats.Models;
 using SportStats.Repositories.TeamRepository;
 using SportStats.Services.TeamService;
 
@@ -8,24 +7,20 @@ namespace SportStats.Services.TeamService
     public class TeamService : ITeamService
     {
         public ITeamRepository _teamRepository;
-        public IMapper _mapper;
 
-        public TeamService(ITeamRepository teamRepository, IMapper mapper)
+        public TeamService(ITeamRepository teamRepository)
         {
             _teamRepository = teamRepository;
-            _mapper = mapper;
         }
 
         public async Task<List<Team>> GetAll()
         {
-            var teams = await _teamRepository.GetAll();
-            return _mapper.Map<List<Team>>(teams);
+            return await _teamRepository.GetAll();
         }
 
         public async Task AddTeam(Team newTeam)
         {
-            var newDbTeam = _mapper.Map<Team>(newTeam);
-            await _teamRepository.CreateAsync(newDbTeam);
+            await _teamRepository.CreateAsync(newTeam);
             await _teamRepository.SaveAsync();
         }
 

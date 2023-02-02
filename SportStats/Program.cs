@@ -1,5 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using SportStats.Data;
+using SportStats.Helpers;
+using SportStats.Helpers.Extensions;
+using SportStats.Helpers.Middleware;
+using SportStats.Helpers.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +12,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<SportStatsContext>(options=>options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddRepositories();
+builder.Services.AddServices();
+builder.Services.AddSeeders();
+builder.Services.AddUtils();
+
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 var app = builder.Build();
+SeedData(app);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -18,6 +31,8 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthorization();
+app.UseMiddleware<JwtMiddleware>();
 app.UseStaticFiles();
 app.UseRouting();
 
@@ -29,3 +44,13 @@ app.MapControllerRoute(
 app.MapFallbackToFile("index.html"); ;
 
 app.Run();
+
+void SeedData(IHost app)
+{
+    var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
+    using (var scope = scopedFactory.CreateScope())
+    {
+        var service = scope.ServiceProvider.GetService<ManagerSeeder>();
+        service.SeedInitialManagers();
+    }
+}

@@ -23,5 +23,10 @@ namespace SportStats.Repositories.ManagerRepository
                 }
             }
         }
+
+        public Manager FindByName(string name)
+        {
+            return _table.FirstOrDefault(x => x.Name == name);
+        }
     }
 }
