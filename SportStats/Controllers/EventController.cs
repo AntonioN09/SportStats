@@ -26,6 +26,7 @@ namespace SportStats.Controllers
             return Ok(await _sportStatsContext.Events.ToListAsync());
         }
 
+        //Read
         [HttpGet("eventById{id}")]
         public async Task<IActionResult> GetEventById([FromRoute] Guid id)
         {
@@ -36,6 +37,7 @@ namespace SportStats.Controllers
             return Ok(eventById);
         }
 
+        //Create
         [HttpPost("CreateEvent")]
         public async Task<IActionResult> CreateEvent(Event eventt)
         {
@@ -50,6 +52,31 @@ namespace SportStats.Controllers
             await _sportStatsContext.AddAsync(newEvent);
             await _sportStatsContext.SaveChangesAsync();
             return Ok(newEvent);
+        }
+
+        //Update
+        [HttpPost("UpdateEvent")]
+        public async Task<IActionResult> UpdateEvent(Event eventt)
+        {
+            var newEvent = _sportStatsContext.Events.First(m => m.Id == eventt.Id);
+
+            newEvent.Name = eventt.Name;
+            newEvent.Rating = eventt.Rating;
+            newEvent.Awards = eventt.Awards;
+            newEvent.Location = eventt.Location;
+            newEvent.Summary = eventt.Summary;
+
+            await _sportStatsContext.SaveChangesAsync();
+            return Ok(newEvent);
+        }
+
+        //Delete
+        [HttpDelete("DeleteEvent")]
+        public async Task<IActionResult> DeleteEvent(Event eventt)
+        {
+            _sportStatsContext.Events.Remove(eventt);
+
+            return Ok(await _sportStatsContext.SaveChangesAsync());
         }
     }
 }

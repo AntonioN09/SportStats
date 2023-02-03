@@ -26,6 +26,7 @@ namespace SportStats.Controllers
             return Ok(await _sportStatsContext.Teams.ToListAsync());
         }
 
+        //Read
         [HttpGet("teamById{id}")]
         public async Task<IActionResult> GetTeamById([FromRoute] Guid id)
         {
@@ -36,6 +37,7 @@ namespace SportStats.Controllers
             return Ok(teamById);
         }
 
+        //Create
         [HttpPost("CreateTeam")]
         public async Task<IActionResult> CreateTeam(Team team)
         {
@@ -50,6 +52,31 @@ namespace SportStats.Controllers
             await _sportStatsContext.AddAsync(newTeam);
             await _sportStatsContext.SaveChangesAsync();
             return Ok(newTeam);
+        }
+
+        //Update
+        [HttpPost("UpdateTeam")]
+        public async Task<IActionResult> UpdateTeam(Team team)
+        {
+            var newTeam = _sportStatsContext.Teams.First(m => m.Id == team.Id);
+
+            newTeam.Name = team.Name;
+            newTeam.Rating = team.Rating;
+            newTeam.Awards = team.Awards;
+            newTeam.Location = team.Location;
+            newTeam.Prestige = team.Prestige;
+
+            await _sportStatsContext.SaveChangesAsync();
+            return Ok(newTeam);
+        }
+
+        //Delete
+        [HttpDelete("DeleteTeam")]
+        public async Task<IActionResult> DeleteTeam(Team team)
+        {
+            _sportStatsContext.Teams.Remove(team);
+
+            return Ok(await _sportStatsContext.SaveChangesAsync());
         }
     }
 }

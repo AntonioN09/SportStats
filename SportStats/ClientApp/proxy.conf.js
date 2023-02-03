@@ -7,6 +7,11 @@ const PROXY_CONFIG = [
   {
     context: [
       "/weatherforecast",
+      "/api/auth",
+      "/api/event",
+      "/api/manager",
+      "/api/player",
+      "/api/team",
    ],
     target: target,
     secure: false,
